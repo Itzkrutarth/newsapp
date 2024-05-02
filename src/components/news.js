@@ -1,22 +1,9 @@
 import React, { Component } from "react"
 import NewsItem from "./newsItem"
+import { logDOM } from "@testing-library/react"
 
 export class News extends Component {
 	articles = [
-		{
-			source: {
-				id: null,
-				name: "The Indian Express",
-			},
-			author: "The Indian Express",
-			title:
-				"Flipkart to slash iPhone 15 price to Rs 63,999 during big saving days sale - The Indian Express",
-			description: null,
-			url: "https://indianexpress.com/article/technology/mobile-tabs/iphone-15-sale-offers-flipkart-9298988/",
-			urlToImage: null,
-			publishedAt: "2024-04-30T10:17:25Z",
-			content: null,
-		},
 		{
 			source: {
 				id: null,
@@ -340,25 +327,35 @@ export class News extends Component {
 		}
 	}
 
+	async componentDidMount() {
+		console.log("insider componentDidMount")
+		let url =
+			"https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332"
+		let data = await fetch(url)
+		let parsedData = data.json()
+		console.log(parsedData)
+		// this.setState({ articles: parsedData.articles })
+	} //it will run after render() runs
+
 	render() {
+		console.log("insider render")
 		return (
 			<div className="container my-3 bg-light">
 				<h2>NewsApp - Top headlines</h2>
+
 				<div className="row">
-					<div className="col-md-4">
-						<NewsItem
-							title="myTitle"
-							description="myDescription"
-							newsUrl="TODO"
-							imageUrl="https://static.toiimg.com/thumb/msid-109708969,width-1070,height-580,imgsize-54758,resizemode-75,overlay-toi_sw,pt-32,y_pad-40/photo.jpg"
-						/>
-					</div>
-					<div className="col-md-4">
-						<NewsItem title="myTitle" description="myDescription" />
-					</div>
-					<div className="col-md-4">
-						<NewsItem title="myTitle" description="myDescription" />
-					</div>
+					{this.state.articles.map((element) => {
+						return (
+							<div className="col-md-4" key={element.url}>
+								<NewsItem
+									title={element.title ? element.title : ""}
+									description={element.description ? element.description : ""}
+									newsUrl={element.url}
+									imageUrl={element.urlToImage}
+								/>
+							</div>
+						)
+					})}
 				</div>
 			</div>
 		)
