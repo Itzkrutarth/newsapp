@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import NewsItem from "./newsItem"
+import Spinner from "./spinner"
 
 export class News extends Component {
 	constructor() {
@@ -14,40 +15,52 @@ export class News extends Component {
 
 	handlePrevClick = async () => {
 		console.log("prev")
-		let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332&pageSize=20&page=${
-			this.state.page - 1
-		}`
+		let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332&pageSize=${
+			this.props.pageSize
+		}&page=${this.state.page - 1}`
+		this.setState({ loading: true })
 		let data = await fetch(url)
 		let parsedData = await data.json()
 		console.log(parsedData)
-		this.setState({ articles: parsedData.articles, page: this.state.page - 1 })
+		this.setState({
+			articles: parsedData.articles,
+			page: this.state.page - 1,
+			loading: false,
+		})
 	}
 	handleNextClick = async () => {
-		if (this.state.page + 1 > Math.ceil(this.state.totalResults / 20)) {
+		if (
+			this.state.page + 1 >
+			Math.ceil(this.state.totalResults / this.props.pageSize)
+		) {
+			//nothing
 		} else {
 			console.log("next")
-			let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332&pageSize=20&page=${
-				this.state.page + 1
-			}`
+			let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332&pageSize=${
+				this.props.pageSize
+			}&page=${this.state.page + 1}`
+			this.setState({ loading: true })
 			let data = await fetch(url)
 			let parsedData = await data.json()
 			console.log(parsedData)
 			this.setState({
 				articles: parsedData.articles,
 				page: this.state.page + 1,
+				loading: false,
 			})
 		}
 	}
 
 	async componentDidMount() {
-		let url =
-			"https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332&pageSize=20&page=1"
+		let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332&pageSize=${this.props.pageSize}&page=1`
+		this.setState({ loading: true })
 		let data = await fetch(url)
 		let parsedData = await data.json()
 		console.log(parsedData)
 		this.setState({
 			articles: parsedData.articles,
 			totalResults: parsedData.totalResults,
+			loading: false,
 		})
 	} //it will run after render() runs
 
@@ -56,32 +69,23 @@ export class News extends Component {
 		const linearGradient = "linear-gradient(to left,blue, red)"
 		return (
 			<div className="container my-3 bg-light">
-				<h1>
-					<p
-						style={{
-							backgroundImage: linearGradient,
-							WebkitBackgroundClip: "text",
-							BackgroundClip: "text",
-							color: "transparent",
-						}}
-					>
-						NewsApp - Top headlines
-					</p>
-				</h1>
+				<h1 className="text-center">NewsApp - Top headlines</h1>
+				{this.state.loading == true ? <Spinner /> : ""}
 
 				<div className="row">
-					{this.state.articles.map((element) => {
-						return (
-							<div className="col-md-4" key={element.url}>
-								<NewsItem
-									title={element.title ? element.title : ""}
-									description={element.description ? element.description : ""}
-									newsUrl={element.url}
-									imageUrl={element.urlToImage}
-								/>
-							</div>
-						)
-					})}
+					{!this.state.loading &&
+						this.state.articles.map((element) => {
+							return (
+								<div className="col-md-4" key={element.url}>
+									<NewsItem
+										title={element.title ? element.title : ""}
+										description={element.description ? element.description : ""}
+										newsUrl={element.url}
+										imageUrl={element.urlToImage}
+									/>
+								</div>
+							)
+						})}
 				</div>
 				<div className="container d-flex justify-content-between">
 					<button
@@ -94,7 +98,8 @@ export class News extends Component {
 					</button>
 					<button
 						disabled={
-							this.state.page + 1 > Math.ceil(this.state.totalResults / 20)
+							this.state.page + 1 >
+							Math.ceil(this.state.totalResults / this.props.pageSize)
 						}
 						type="button"
 						className="btn btn-dark"
