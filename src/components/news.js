@@ -23,14 +23,20 @@ export class News extends Component {
 		this.setState({ articles: parsedData.articles, page: this.state.page - 1 })
 	}
 	handleNextClick = async () => {
-		console.log("next")
-		let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332&pageSize=20&page=${
-			this.state.page + 1
-		}`
-		let data = await fetch(url)
-		let parsedData = await data.json()
-		console.log(parsedData)
-		this.setState({ articles: parsedData.articles, page: this.state.page + 1 })
+		if (this.state.page + 1 > Math.ceil(this.state.totalResults / 20)) {
+		} else {
+			console.log("next")
+			let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332&pageSize=20&page=${
+				this.state.page + 1
+			}`
+			let data = await fetch(url)
+			let parsedData = await data.json()
+			console.log(parsedData)
+			this.setState({
+				articles: parsedData.articles,
+				page: this.state.page + 1,
+			})
+		}
 	}
 
 	async componentDidMount() {
@@ -41,7 +47,7 @@ export class News extends Component {
 		console.log(parsedData)
 		this.setState({
 			articles: parsedData.articles,
-			totalArticles: parsedData.totalResults,
+			totalResults: parsedData.totalResults,
 		})
 	} //it will run after render() runs
 
@@ -87,7 +93,9 @@ export class News extends Component {
 						&larr; Previous
 					</button>
 					<button
-						// disabled={this.state.page >= 2}
+						disabled={
+							this.state.page + 1 > Math.ceil(this.state.totalResults / 20)
+						}
 						type="button"
 						className="btn btn-dark"
 						onClick={this.handleNextClick}
