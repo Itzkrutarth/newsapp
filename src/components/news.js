@@ -8,6 +8,7 @@ export class News extends Component {
 		console.log("called a constructor from news component!!!")
 		this.state = {
 			articles: [],
+			totalResults: null,
 			loading: false,
 			page: 1,
 		}
@@ -52,7 +53,7 @@ export class News extends Component {
 	}
 
 	async componentDidMount() {
-		let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332&pageSize=${this.props.pageSize}&page=1`
+		let url = `https://newsapi.org/v2/top-headlines?country=${this.props.countryCode}&apiKey=02f6cddeae0b464594fa9015a6937332&pageSize=${this.props.pageSize}&page=1`
 		this.setState({ loading: true })
 		let data = await fetch(url)
 		let parsedData = await data.json()
@@ -66,15 +67,20 @@ export class News extends Component {
 
 	render() {
 		console.log("insider render")
-		const linearGradient = "linear-gradient(to left,blue, red)"
+
 		return (
 			<div className="container my-3 bg-light">
 				<h1 className="text-center">NewsApp - Top headlines</h1>
 				{this.state.loading == true ? <Spinner /> : ""}
+				<div className="container" align="right">
+					Showing total {this.state.totalResults} articles
+				</div>
 
 				<div className="row">
 					{!this.state.loading &&
 						this.state.articles.map((element) => {
+							// this.setState({ totalResults: totalResults })
+							// console.log(this.state.totalResults)
 							return (
 								<div className="col-md-4" key={element.url}>
 									<NewsItem
@@ -82,6 +88,8 @@ export class News extends Component {
 										description={element.description ? element.description : ""}
 										newsUrl={element.url}
 										imageUrl={element.urlToImage}
+										courtesy={element.source.name}
+										time={element.publishedAt}
 									/>
 								</div>
 							)
