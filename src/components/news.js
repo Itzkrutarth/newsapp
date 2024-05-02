@@ -1,19 +1,17 @@
 import React, { Component } from "react"
 import NewsItem from "./newsItem"
-import { logDOM } from "@testing-library/react"
 
 export class News extends Component {
 	constructor() {
 		super()
 		console.log("called a constructor from news component!!!")
 		this.state = {
-			articles: this.articles,
+			articles: [],
 			loading: false,
 		}
 	}
 
 	async componentDidMount() {
-		console.log("insider componentDidMount")
 		let url =
 			"https://newsapi.org/v2/top-headlines?country=in&apiKey=02f6cddeae0b464594fa9015a6937332"
 		let data = await fetch(url)
