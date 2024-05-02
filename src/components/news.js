@@ -339,9 +339,21 @@ export class News extends Component {
 
 	render() {
 		console.log("insider render")
+		const linearGradient = "linear-gradient(to left,blue, red)"
 		return (
 			<div className="container my-3 bg-light">
-				<h2>NewsApp - Top headlines</h2>
+				<h1>
+					<p
+						style={{
+							backgroundImage: linearGradient,
+							WebkitBackgroundClip: "text",
+							BackgroundClip: "text",
+							color: "transparent",
+						}}
+					>
+						NewsApp - Top headlines
+					</p>
+				</h1>
 
 				<div className="row">
 					{this.state.articles.map((element) => {
