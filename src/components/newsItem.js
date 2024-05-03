@@ -21,7 +21,9 @@ export class NewsItem extends Component {
 							<strong>{courtesy}</strong>
 						</i>
 						<h5 className="card-title">{title}</h5>
-						<p className="card-text">{description}</p>
+						<p className="card-text" style={{ maxLines: "2" }}>
+							{description}
+						</p>
 						<div
 							className="my-2"
 							style={{

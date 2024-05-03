@@ -69,11 +69,11 @@ export class News extends Component {
 		console.log("insider render")
 
 		return (
-			<div className="container my-3 bg-light">
+			<div className="container mt-3 ">
 				<h1 className="text-center">NewsApp - Top headlines</h1>
-				{this.state.loading == true ? <Spinner /> : ""}
+				{this.state.loading === true ? <Spinner /> : ""}
 				<div className="container" align="right">
-					Showing total {this.state.totalResults} articles
+					<i>Showing total {this.state.totalResults} articles!!!</i>
 				</div>
 
 				<div className="row">
