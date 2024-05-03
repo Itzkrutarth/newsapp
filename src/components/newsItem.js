@@ -20,12 +20,12 @@ export class NewsItem extends Component {
 						<i>
 							<strong>{courtesy}</strong>
 						</i>
-						<h5 className="card-title">{title}</h5>
+						<h4 className="card-title">{title}</h4>
 						<p className="card-text" style={{ maxLines: "2" }}>
 							{description}
 						</p>
 						<div
-							className="my-2"
+							className=" my-2 "
 							style={{
 								fontSize: "15px",
 								fontFamily: "monospace",

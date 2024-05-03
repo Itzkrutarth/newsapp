@@ -6,7 +6,8 @@ export class Navbar extends Component {
 	render() {
 		return (
 			<div>
-				<nav className="navbar navbar-expand-lg  bg-dark navbar-dark">
+				<nav className="navbar navbar-expand-lg  bg-dark navbar-dark ">
+					{/* fixedTop can be used to make it fixed at top. */}
 					<div className="container-fluid">
 						<a className="navbar-brand" href="/">
 							NewsApp
